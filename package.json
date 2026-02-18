@@ -5,8 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc && vite build",
-    "preview": "vite preview"
+    "build": "tsc && vite build --outDir www",
+    "preview": "vite preview --outDir www"
   },
   "devDependencies": {
     "@types/three": "^0.182.0",

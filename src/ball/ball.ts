@@ -35,15 +35,10 @@ function getPosition(angle: number) {
 export class Ball {
   static readonly radius = 0.3
   static readonly startPosition = getPosition(90)
-  readonly world: World
-  readonly parent: Scene
-  readonly mesh: Mesh
-  readonly rigidBody: RigidBody
+  private mesh: Mesh
+  private rigidBody: RigidBody
 
   constructor(world: World, parent: Scene) {
-    this.world = world
-    this.parent = parent
-
     const geometry = new SphereGeometry(Ball.radius)
     const material = new MeshPhongMaterial({ emissive: 0xffff00 })
     this.mesh = new Mesh(geometry, material)
