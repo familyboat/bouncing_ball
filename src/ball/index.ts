@@ -50,8 +50,16 @@ export async function runGame() {
     ball.reset()
   }
 
-  function onPointerMove(e: PointerEvent) {
-    const movementX = e.movementX
+  let lastX: number | null = null
+  function onPointerMove(e: TouchEvent) {
+    const x = e.touches[0].clientX
+    if (lastX === null) {
+      lastX = x
+      return
+    }
+
+    const movementX = x - lastX
+    lastX = x
 
     let rotation
 
@@ -66,7 +74,7 @@ export async function runGame() {
     platform.rotate(rotation)
   }
 
-  window.addEventListener('pointermove', onPointerMove)
+  window.addEventListener('touchmove', onPointerMove)
   window.addEventListener('dblclick', reset)
 
   function animate() {
