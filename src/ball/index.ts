@@ -4,6 +4,7 @@ import RAPIER, { EventQueue } from '@dimforge/rapier3d-compat'
 import { Platform } from './platform'
 import { sliceType } from './slice'
 import Stats from 'three/examples/jsm/libs/stats.module.js'
+import Hammer from 'hammerjs'
 
 export async function runGame() {
   const scene = new THREE.Scene()
@@ -50,31 +51,23 @@ export async function runGame() {
     ball.reset()
   }
 
-  let lastX: number | null = null
-  function onPointerMove(e: TouchEvent) {
-    const x = e.touches[0].clientX
-    if (lastX === null) {
-      lastX = x
-      return
-    }
-
-    const movementX = x - lastX
-    lastX = x
-
+  const mc = new Hammer.Manager(renderer.domElement)
+  const pan = new Hammer.Pan()
+  mc.add(pan)
+  mc.on('pan', (e) => {
+    const direction = e.direction
     let rotation
-
-    if (movementX > 0) {
+    if (direction === 4) {
       rotation = 5
-    } else if (movementX < 0) {
+    } else if (direction === 2) {
       rotation = -5
     } else {
       return
     }
 
     platform.rotate(rotation)
-  }
+  })
 
-  window.addEventListener('touchmove', onPointerMove)
   window.addEventListener('dblclick', reset)
 
   function animate() {
