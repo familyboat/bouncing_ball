@@ -58,9 +58,9 @@ export async function runGame() {
     const direction = e.direction
     let rotation
     if (direction === 4) {
-      rotation = 5
+      rotation = 3
     } else if (direction === 2) {
-      rotation = -5
+      rotation = -3
     } else {
       return
     }
