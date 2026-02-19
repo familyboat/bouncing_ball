@@ -67,7 +67,7 @@ export async function runGame() {
   }
 
   window.addEventListener('pointermove', onPointerMove)
-  window.addEventListener('click', reset)
+  window.addEventListener('dblclick', reset)
 
   function animate() {
     stats.begin()
