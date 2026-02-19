@@ -9,6 +9,7 @@
     "preview": "vite preview --outDir docs"
   },
   "devDependencies": {
+    "@types/hammerjs": "^2.0.46",
     "@types/three": "^0.182.0",
     "typescript": "~5.9.3",
     "vconsole": "^3.15.1",
@@ -16,7 +17,6 @@
   },
   "dependencies": {
     "@dimforge/rapier3d-compat": "^0.19.3",
-    "@types/hammerjs": "^2.0.46",
     "hammerjs": "^2.0.8",
     "three": "^0.182.0"
   }
