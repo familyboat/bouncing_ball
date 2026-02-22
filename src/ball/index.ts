@@ -2,7 +2,7 @@ import * as THREE from 'three'
 import { Ball } from './ball'
 import RAPIER, { EventQueue } from '@dimforge/rapier3d-compat'
 import { Platform } from './platform'
-import { sliceType } from './slice'
+import { Slice, sliceType } from './slice'
 import Stats from 'three/examples/jsm/libs/stats.module.js'
 import Hammer from 'hammerjs'
 
@@ -65,6 +65,7 @@ export async function runGame() {
       return
     }
 
+    Slice.rotation += rotation
     platform.rotate(rotation)
   })
 

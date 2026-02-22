@@ -42,6 +42,7 @@ export const sliceConfig: Record<
 
 export class Slice {
   static readonly minAngle = 15
+  static rotation = 0
 
   private startAngle: number
   private count: number
@@ -51,8 +52,6 @@ export class Slice {
   private rigidBody: RigidBody
   private color: number
   private type: SliceType
-
-  private rotation = 0
 
   constructor(
     world: World,
@@ -194,9 +193,11 @@ export class Slice {
         level: options.level,
       }
     }
+
+    this.rotate(Slice.rotation)
   }
 
-  private ensureRotation() {
+  private static ensureRotation() {
     if (this.rotation >= 360) {
       this.rotation = this.rotation % 360
     } else if (this.rotation < 0) {
@@ -206,13 +207,14 @@ export class Slice {
 
   rotate(angle: number) {
     const radian = MathUtils.degToRad(angle)
-    this.rotation += angle
-    this.ensureRotation()
     const axis = new Vector3(0, 1, 0)
+    // use relative rotation value
     this.mesh.rotateOnWorldAxis(axis, radian)
+    Slice.ensureRotation()
+    // use absolute rotation value
     const quat = new Quaternion().setFromAxisAngle(
       axis,
-      MathUtils.degToRad(this.rotation)
+      MathUtils.degToRad(Slice.rotation)
     )
 
     this.rigidBody.setRotation(
