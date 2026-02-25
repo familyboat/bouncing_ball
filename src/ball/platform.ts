@@ -1,6 +1,7 @@
 import { type World } from '@dimforge/rapier3d-compat'
 import { Group, type Scene } from 'three'
 import { deriveFromFloorBase, Floor, floor1 } from './floor'
+import { soundManager } from './sound'
 
 /**
  * is consisted of floors
@@ -85,6 +86,8 @@ export class Platform {
         `latest stat:\nscore: ${this.score}\ncurrentLevel: ${currentLevel}\nnextLevel: ${this.nextLevel}\ncountOfFloor: ${this.floors.length}`
       )
       this.countOfPassedLevel++
+
+      soundManager.play(['success', 'ball', 'void'])
 
       if (this.shouldDestroy(currentLevel)) {
         this.destroy()

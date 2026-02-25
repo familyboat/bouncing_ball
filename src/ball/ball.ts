@@ -16,6 +16,7 @@ import {
   type Scene,
 } from 'three'
 import { Floor } from './floor'
+import { soundManager } from './sound'
 
 declare module '@dimforge/rapier3d-compat' {
   interface Collider {
@@ -93,6 +94,8 @@ export class Ball {
     )
 
     this.rigidBody.setBodyType(RigidBodyType.Dynamic, true)
+
+    soundManager.play(['jump', 'ball', 'safe_slice'])
   }
 
   die(currentLevel: number | undefined) {
@@ -110,6 +113,8 @@ export class Ball {
       },
       false
     )
+
+    soundManager.play(['hurt', 'ball', 'danger_slice'])
   }
 
   reset() {
