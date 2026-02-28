@@ -27,14 +27,20 @@ declare module '@dimforge/rapier3d-compat' {
   }
 }
 
+const radiusOfBall = 0.3
+
 function getPosition(angle: number) {
   const radian = MathUtils.degToRad(angle)
   const radius = (Floor.innerRadius + Floor.outerRadius) / 2
-  return new Vector3(radius * Math.cos(radian), 0.3, radius * Math.sin(radian))
+  return new Vector3(
+    radius * Math.cos(radian),
+    radiusOfBall,
+    radius * Math.sin(radian)
+  )
 }
 
 export class Ball {
-  static readonly radius = 0.3
+  static readonly radius = radiusOfBall
   static readonly startPosition = getPosition(90)
   static readonly startVelocity = new Vector3(0, Ball.radius * 30, 0)
   private mesh: Mesh

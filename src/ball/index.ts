@@ -71,8 +71,12 @@ export async function runGame() {
 
   window.addEventListener('dblclick', reset)
 
+  const clock = new THREE.Clock()
+
   function animate() {
+    const dt = clock.getDelta()
     stats.begin()
+    world.integrationParameters.dt = dt
     world.step(eventQueue)
 
     let result = 1
