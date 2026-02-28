@@ -36,12 +36,13 @@ function getPosition(angle: number) {
 export class Ball {
   static readonly radius = 0.3
   static readonly startPosition = getPosition(90)
+  static readonly startVelocity = new Vector3(0, Ball.radius * 30, 0)
   private mesh: Mesh
   private rigidBody: RigidBody
 
   constructor(world: World, parent: Scene) {
     const geometry = new SphereGeometry(Ball.radius)
-    const material = new MeshPhongMaterial({ emissive: 0xffff00 })
+    const material = new MeshPhongMaterial({ color: 0xffff00 })
     this.mesh = new Mesh(geometry, material)
     this.mesh.position.set(
       Ball.startPosition.x,
@@ -56,7 +57,11 @@ export class Ball {
         Ball.startPosition.y,
         Ball.startPosition.z
       )
-      .setLinvel(0, 8, 0)
+      .setLinvel(
+        Ball.startVelocity.x,
+        Ball.startVelocity.y,
+        Ball.startVelocity.z
+      )
       .enabledTranslations(false, true, false)
       .setCcdEnabled(true)
     this.rigidBody = world.createRigidBody(rigidBodyDesc)
@@ -72,8 +77,12 @@ export class Ball {
   render(camera: PerspectiveCamera) {
     const position = this.rigidBody.translation()
     this.mesh.position.set(position.x, position.y, position.z)
-    camera.position.set(position.x, position.y + 2, position.z + 0)
-    camera.lookAt(position.x, position.y, position.z)
+    camera.position.set(
+      position.x,
+      position.y + Ball.radius * 5,
+      position.z + Ball.radius * 10
+    )
+    camera.lookAt(position.x, position.y - Ball.radius, position.z)
   }
 
   resetVel(currentLevel: number | undefined) {
@@ -83,7 +92,14 @@ export class Ball {
 
     const position = this.rigidBody.translation()
     this.rigidBody.setBodyType(RigidBodyType.KinematicVelocityBased, false)
-    this.rigidBody.setLinvel({ x: 0, y: 8, z: 0 }, false)
+    this.rigidBody.setLinvel(
+      {
+        x: Ball.startVelocity.x,
+        y: Ball.startVelocity.y,
+        z: Ball.startVelocity.z,
+      },
+      false
+    )
     this.rigidBody.setTranslation(
       {
         x: position.x,
@@ -119,7 +135,14 @@ export class Ball {
 
   reset() {
     this.rigidBody.setBodyType(RigidBodyType.KinematicVelocityBased, false)
-    this.rigidBody.setLinvel({ x: 0, y: 8, z: 0 }, false)
+    this.rigidBody.setLinvel(
+      {
+        x: Ball.startVelocity.x,
+        y: Ball.startVelocity.y,
+        z: Ball.startVelocity.z,
+      },
+      false
+    )
     this.rigidBody.setTranslation(
       {
         x: Ball.startPosition.x,

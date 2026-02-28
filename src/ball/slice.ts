@@ -13,8 +13,10 @@ import {
   ExtrudeGeometry,
   MeshBasicMaterial,
   Quaternion,
+  MeshPhongMaterial,
 } from 'three'
 import { Floor } from './floor'
+import { Ball } from './ball'
 
 export const sliceType = {
   safe: 2,
@@ -95,7 +97,7 @@ export class Slice {
 
     const position = new Vector3(
       0,
-      -options.level * Floor.offset - Floor.height / 2,
+      -options.level * Floor.offset - Ball.radius / 40, // minus Ball.radius / 40 is on purpose, cause it is good for physics simulation
       0
     )
 
@@ -138,7 +140,7 @@ export class Slice {
 
     const isVoid = this.type === sliceType.void
 
-    const material = new MeshBasicMaterial({
+    const material = new MeshPhongMaterial({
       color: this.color,
       transparent: isVoid ? true : false,
       opacity: isVoid ? 0 : 1,
