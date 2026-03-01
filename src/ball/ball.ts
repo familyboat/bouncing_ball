@@ -17,6 +17,8 @@ import {
 } from 'three'
 import { Floor } from './floor'
 import { soundManager } from './sound'
+import gsap from 'gsap'
+import { throttle } from 'lodash-es'
 
 declare module '@dimforge/rapier3d-compat' {
   interface Collider {
@@ -45,6 +47,8 @@ export class Ball {
   static readonly startVelocity = new Vector3(0, Ball.radius * 30, 0)
   private mesh: Mesh
   private rigidBody: RigidBody
+  private state: 'die' | 'moving' = 'moving'
+  private parent: Scene
 
   constructor(world: World, parent: Scene) {
     const geometry = new SphereGeometry(Ball.radius)
@@ -56,6 +60,7 @@ export class Ball {
       Ball.startPosition.z
     )
     parent.add(this.mesh)
+    this.parent = parent
 
     const rigidBodyDesc = RigidBodyDesc.dynamic()
       .setTranslation(
@@ -78,6 +83,8 @@ export class Ball {
     collider.data = {
       id: 1,
     }
+
+    this.spawnShadowBall = throttle(this.spawnShadowBall.bind(this), 66)
   }
 
   render(camera: PerspectiveCamera) {
@@ -89,6 +96,15 @@ export class Ball {
       position.z + Ball.radius * 10
     )
     camera.lookAt(position.x, position.y - Ball.radius, position.z)
+
+    this.spawnShadowBall()
+  }
+
+  spawnShadowBall() {
+    if (this.state === 'moving') {
+      const position = this.mesh.position
+      new ShadowBall(position, this.parent)
+    }
   }
 
   resetVel(currentLevel: number | undefined) {
@@ -136,6 +152,8 @@ export class Ball {
       false
     )
 
+    this.state = 'die'
+
     soundManager.play(['hurt', 'ball', 'danger_slice'])
   }
 
@@ -159,5 +177,35 @@ export class Ball {
     )
 
     this.rigidBody.setBodyType(RigidBodyType.Dynamic, true)
+
+    this.state = 'moving'
+  }
+}
+
+class ShadowBall {
+  constructor(pos: Vector3, parent: Scene) {
+    const geometry = new SphereGeometry(Ball.radius)
+    const material = new MeshPhongMaterial({
+      color: 0x9f9f9f,
+    })
+    const mesh = new Mesh(geometry, material)
+    mesh.position.set(pos.x, pos.y, pos.z)
+
+    parent.add(mesh)
+
+    const config = {
+      scale: 0,
+    }
+
+    gsap.from(config, {
+      scale: 1,
+      duration: 0.66,
+      onUpdate() {
+        mesh.scale.set(config.scale, config.scale, config.scale)
+      },
+      onComplete() {
+        parent.remove(mesh)
+      },
+    })
   }
 }

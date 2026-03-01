@@ -17,6 +17,7 @@ import {
 } from 'three'
 import { Floor } from './floor'
 import { Ball } from './ball'
+import gsap from 'gsap'
 
 export const sliceType = {
   safe: 2,
@@ -241,10 +242,26 @@ export class Slice {
       collider.data.id = sliceType.void
       collider.setCollisionGroups(2)
     }
-    const transparentMaterial = new MeshBasicMaterial({
-      transparent: true,
-      opacity: 0,
+
+    const config = {
+      scale: 0,
+    }
+
+    const that = this
+
+    gsap.from(config, {
+      scale: 1,
+      duration: 0.33,
+      onUpdate() {
+        that.mesh.scale.set(config.scale, config.scale, config.scale)
+      },
+      onComplete() {
+        const transparentMaterial = new MeshBasicMaterial({
+          transparent: true,
+          opacity: 0,
+        })
+        that.mesh.material = transparentMaterial
+      },
     })
-    this.mesh.material = transparentMaterial
   }
 }

@@ -18,7 +18,10 @@
   "dependencies": {
     "@dimforge/rapier3d-compat": "^0.19.3",
     "@pixi/sound": "^6.0.1",
+    "@types/lodash-es": "^4.17.12",
+    "gsap": "^3.14.2",
     "hammerjs": "^2.0.8",
+    "lodash-es": "^4.17.23",
     "three": "^0.182.0"
   }
 }
