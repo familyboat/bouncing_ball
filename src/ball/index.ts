@@ -29,6 +29,7 @@ export async function runGame() {
     const intensity = 4.8
     const light = new THREE.DirectionalLight(color, intensity)
     light.position.set(-1, 2, 4)
+    light.target.position.set(0, 0, 0)
     scene.add(light)
   }
 
