@@ -31,6 +31,7 @@ export async function runGame() {
     light.position.set(-1, 2, 4)
     light.target.position.set(0, 0, 0)
     scene.add(light)
+    scene.add(light.target)
   }
 
   addLight()
