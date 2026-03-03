@@ -3,6 +3,6 @@ import VConsole from 'vconsole'
 import './style.css'
 
 new VConsole()
-console.log('0.0.9')
+console.log('0.0.10')
 
 runGame()
