@@ -19,6 +19,7 @@ export async function runGame() {
     antialias: true,
   })
   renderer.setSize(window.innerWidth, window.innerHeight)
+  renderer.setPixelRatio(window.devicePixelRatio)
   document.body.appendChild(renderer.domElement)
 
   const stats = new Stats()
