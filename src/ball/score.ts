@@ -6,7 +6,6 @@ class Score {
 
   increment() {
     this._score += 1
-    console.log(`current score: ${this._score}`)
   }
 
   reset() {

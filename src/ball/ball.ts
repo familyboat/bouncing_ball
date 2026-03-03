@@ -19,6 +19,8 @@ import { Floor } from './floor'
 import { soundManager } from './sound'
 import gsap from 'gsap'
 import { throttle } from 'lodash-es'
+import { CSS2DObject } from 'three/examples/jsm/Addons.js'
+import { score } from './score'
 
 declare module '@dimforge/rapier3d-compat' {
   interface Collider {
@@ -49,6 +51,8 @@ export class Ball {
   private rigidBody: RigidBody
   private state: 'die' | 'moving' = 'moving'
   private parent: Scene
+  private scoreDiv: HTMLDivElement
+  private readonly initialScore = 0
 
   constructor(world: World, parent: Scene) {
     const geometry = new SphereGeometry(Ball.radius)
@@ -85,6 +89,19 @@ export class Ball {
     }
 
     this.spawnShadowBall = throttle(this.spawnShadowBall.bind(this), 66)
+
+    const scoreDiv = document.createElement('div')
+    this.scoreDiv = scoreDiv
+    scoreDiv.className = 'score'
+    scoreDiv.textContent = `${this.initialScore}`
+
+    const scoreLabel = new CSS2DObject(scoreDiv)
+    scoreLabel.position.set(1.5 * Ball.radius, 0, 0)
+    this.mesh.add(scoreLabel)
+  }
+
+  updateScore() {
+    this.scoreDiv.textContent = `${score.score}`
   }
 
   render(camera: PerspectiveCamera) {
@@ -179,6 +196,8 @@ export class Ball {
     this.rigidBody.setBodyType(RigidBodyType.Dynamic, true)
 
     this.state = 'moving'
+
+    this.scoreDiv.textContent = `${this.initialScore}`
   }
 }
 

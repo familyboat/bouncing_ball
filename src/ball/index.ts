@@ -5,6 +5,7 @@ import { Platform } from './platform'
 import { Slice, sliceType } from './slice'
 import Stats from 'three/examples/jsm/libs/stats.module.js'
 import Hammer from 'hammerjs'
+import { CSS2DRenderer } from 'three/examples/jsm/Addons.js'
 
 export async function runGame() {
   const scene = new THREE.Scene()
@@ -21,6 +22,13 @@ export async function runGame() {
   renderer.setSize(window.innerWidth, window.innerHeight)
   renderer.setPixelRatio(window.devicePixelRatio)
   document.body.appendChild(renderer.domElement)
+
+  const labelRenderer = new CSS2DRenderer()
+  labelRenderer.setSize(window.innerWidth, window.innerHeight)
+  labelRenderer.domElement.style.position = 'absolute'
+  labelRenderer.domElement.style.top = '0px'
+  labelRenderer.domElement.style.pointerEvents = 'none'
+  document.body.appendChild(labelRenderer.domElement)
 
   const stats = new Stats()
   document.body.appendChild(stats.dom)
@@ -110,11 +118,13 @@ export async function runGame() {
       case sliceType.void * sliceType.void:
       case sliceType.void: {
         platform.pass(level)
+        ball.updateScore()
         break
       }
     }
 
     renderer.render(scene, camera)
+    labelRenderer.render(scene, camera)
     ball.render(camera)
     stats.end()
   }
