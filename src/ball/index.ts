@@ -108,7 +108,7 @@ export async function runGame() {
       }
       case sliceType.void * sliceType.void:
       case sliceType.void: {
-        platform.updateScore(level)
+        platform.pass(level)
         break
       }
     }

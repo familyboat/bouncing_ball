@@ -2,6 +2,7 @@ import { type World } from '@dimforge/rapier3d-compat'
 import { Group, type Scene } from 'three'
 import { deriveFromFloorBase, Floor, floor1 } from './floor'
 import { soundManager } from './sound'
+import { score } from './score'
 
 /**
  * is consisted of floors
@@ -12,7 +13,6 @@ export class Platform {
   private world: World
   private nextLevel = 0
   private countOfPassedLevel = 0
-  private score = 0
 
   constructor(world: World, parent: Scene) {
     const group = new Group()
@@ -73,7 +73,7 @@ export class Platform {
     this.floors = []
   }
 
-  updateScore(currentLevel: number | undefined) {
+  pass(currentLevel: number | undefined) {
     if (currentLevel === undefined) {
       throw new Error(`There must be something wrong, please check it.`)
     }
@@ -81,9 +81,9 @@ export class Platform {
     if (currentLevel === this.countOfPassedLevel) {
       const floor = this.floors.find((floor) => floor.level === currentLevel)
       floor?.fly()
-      this.score++
+      score.increment()
       console.log(
-        `latest stat:\nscore: ${this.score}\ncurrentLevel: ${currentLevel}\nnextLevel: ${this.nextLevel}\ncountOfFloor: ${this.floors.length}`
+        `latest stat:\ncurrentLevel: ${currentLevel}\nnextLevel: ${this.nextLevel}\ncountOfFloor: ${this.floors.length}`
       )
       this.countOfPassedLevel++
 
@@ -107,7 +107,8 @@ export class Platform {
     this.destroyAll()
     this.nextLevel = 0
     this.countOfPassedLevel = 0
-    this.score = 0
     this.generate()
+
+    score.reset()
   }
 }
